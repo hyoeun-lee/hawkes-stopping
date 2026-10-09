@@ -9,6 +9,9 @@ A buyer must buy one unit within H seconds of a decision time t. Rules:
          expected to fall further), otherwise at t + H. Check times are t, every event of the
          model's definition in (t, t + H), and a grid of n_grid points. This is a one-step
          lookahead rule, not the optimal stopping rule, so its value is a lower bound.
+         With rule="instant" the model rule instead stops when the current signed intensity
+         D = g'd is >= 0 (prices rising now), ignoring how the components decay: the rule a
+         one-timescale model would give, used as a comparison.
 
 Cost = quoted NBBO ask at execution (+ execution latency) minus the ask at t, in ticks.
 Positive = paid more than at t.
@@ -69,7 +72,8 @@ def _price(t_arr, v_arr, s):
     return v_arr[max(j, 0)]
 
 
-def run_day(day, drift, decisions, horizons=HORIZONS, n_grid=20, info_lag=0.0, exec_lat=0.0):
+def run_day(day, drift, decisions, horizons=HORIZONS, n_grid=20, info_lag=0.0, exec_lat=0.0,
+            rule="lookahead"):
     """Costs of now / wait / model for each decision time and horizon.
 
     Returns {H: dict of arrays now, wait, model, waited (fraction of H waited by model)}.
@@ -91,7 +95,9 @@ def run_day(day, drift, decisions, horizons=HORIZONS, n_grid=20, info_lag=0.0, e
             checks = checks[checks <= t + H]
             tau = t + H
             for s in checks:
-                if drift.expected(acc.state(s - info_lag), t + H - s) >= 0:
+                d = acc.state(s - info_lag)
+                stop = (drift.g @ d >= 0) if rule == "instant" else (drift.expected(d, t + H - s) >= 0)
+                if stop:
                     tau = s
                     break
             model[q] = ask(tau + exec_lat) - a0
@@ -110,12 +116,12 @@ def decision_sets(day, grid_step=30.0, margin=61.0, info_lag=0.0):
 
 
 def backtest(days, drift, horizons=HORIZONS, info_lag=0.0, exec_lat=0.0, grid_step=30.0,
-             log=None):
+             log=None, rule="lookahead"):
     """Per-day mean costs, one row per (day, decision set, horizon)."""
     rows = []
     for day in days:
         for name, dec in decision_sets(day, grid_step, info_lag=info_lag).items():
-            res = run_day(day, drift, dec, horizons, info_lag=info_lag, exec_lat=exec_lat)
+            res = run_day(day, drift, dec, horizons, info_lag=info_lag, exec_lat=exec_lat, rule=rule)
             for H in horizons:
                 r = res[H]
                 rows.append({"day": day.label, "set": name, "H": H, "n": len(dec),

@@ -9,3 +9,13 @@ logs/
 __pycache__/
 *.pyc
 .pytest_cache/
+# LaTeX build files and figure previews
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+docs/overview/overview.pdf
+docs/overview/figures/*.png

@@ -39,7 +39,7 @@ $$
 
 ## 4. Questions
 
-- **Q1 (structure).** When is the optimal rule monotone in each $d_k$ (a threshold surface)? Conjecture: when the resolvent of the signed kernel has one sign on the deadline horizon; it fails when $g_k$ changes sign across scales. INTC (continuation at 15 ms, reversal beyond) is the monotone case; TGT ($g$ = +, −, 0, +) is a candidate counterexample.
+- **Q1 (structure).** What does the optimal rule look like in the signed-accumulator state, and how far is it from the one-step rule? The one-step rule's stopping region is a half-space in $d$ whose normal turns with the remaining time; it is monotone in each $d_k$ when $\sum_k |g_k| < 1/2$ (proved; holds in every fit so far, TGT included), but it is not a threshold in the scalar signed intensity, and after an event the decision can switch sign with the deadline (TGT). Conjecture: the optimal rule is monotone in each $d_k$ under the same condition. See `overview/overview.tex`, sections 6–7.
 - **Q2 (value).** What is timing worth, in ticks and as a share of the half-spread, by stock, deadline, decision context (random time, after an up move, after a down move) and latency? Out of sample.
 - **Q3 (raw against clean).** Rules driven by raw (E0) intensities exploit brief states. How fast does that edge decay with execution latency, and what is left that only the clean kernel provides?
 - **Q4 (decision-relevant identification).** The rule with deadline $T$ depends on the kernel mainly through its signed mass within $T$. Is the value of timing robust to the baseline specification (hawkes-taq section 16) where traders care, i.e. for $T$ up to about a minute?
@@ -53,7 +53,7 @@ Prototype, INTC and TGT, May 2017: [`prototype_201705.md`](prototype_201705.md).
 
 1. Out-of-sample panel: 8 stocks, fit April → test May, fit May → test June, E1m and E0, latencies 0–5 ms (`scripts/cluster/oos_panel.sbatch`).
 2. Optimal rule for P1 by dynamic programming over the signed accumulators (K = 4, PDMP), against the one-step rule; how much the one-step rule leaves.
-3. Q1: monotonicity results and the TGT counterexample.
+3. Q1: the optimal rule's monotonicity (conjecture) and its gap to the one-step rule.
 4. Extend to all 14 months; add the sell side (mirror image) and a running inventory penalty.
 5. P2 after fetching best sizes.
 

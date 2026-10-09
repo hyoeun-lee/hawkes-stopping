@@ -33,6 +33,9 @@ def main():
                    help="seconds; default 0.001 for E1m (event confirmation), 0 for E0")
     p.add_argument("--exec-lat", type=float, default=0.0)
     p.add_argument("--grid-step", type=float, default=30.0)
+    p.add_argument("--rule", choices=["lookahead", "instant"], default="lookahead",
+                   help="lookahead: expected displacement to the deadline >= 0; instant: current "
+                        "signed intensity >= 0 (one-timescale comparison)")
     p.add_argument("--out", default="results")
     a = p.parse_args()
 
@@ -43,10 +46,11 @@ def main():
     drift = SignedDrift.from_fit(obj["fit"], obj["size"])
     days = [load_day(f, definition) for f in month_files(a.nbbo, a.sym, a.test_month)]
     per_day = backtest(days, drift, info_lag=info_lag, exec_lat=a.exec_lat,
-                       grid_step=a.grid_step, log=lambda m: print(m, flush=True))
+                       grid_step=a.grid_step, log=lambda m: print(m, flush=True), rule=a.rule)
     summ = summarize(per_day)
     tag = (f"{a.sym}_{definition}_test{a.test_month}_fit{Path(a.fit).stem.split('_')[-1]}"
-           f"_lag{info_lag * 1e3:g}ms_lat{a.exec_lat * 1e3:g}ms")
+           f"_lag{info_lag * 1e3:g}ms_lat{a.exec_lat * 1e3:g}ms"
+           + ("" if a.rule == "lookahead" else f"_{a.rule}"))
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     per_day.to_csv(out / f"{tag}_per_day.csv", index=False)

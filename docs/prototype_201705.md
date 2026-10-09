@@ -56,6 +56,25 @@ May fit: memories 5 ms, 42 ms, 0.87 s, 10 s; g = (+0.036, −0.101, −0.000, +0
 
 After an up move with a 10 s deadline the rule waits out the 40 ms reversal and buys before the slow continuation. Under a sign-changing kernel the optimal rule need not be monotone in the state (problem statement Q1). To be confirmed out of sample.
 
+## One timescale against several (INTC, out of sample, ℓ = 2 ms)
+
+The *instant* rule stops when the current signed intensity D = g'd is ≥ 0, ignoring how the components decay (the rule a one-timescale model gives). Same fit and setting as the INTC table above (`results/INTC_E1m_test201705_fit201704_lag1ms_lat2ms_instant.csv`).
+
+| Decision time, H | One-step rule | Instant rule |
+|---|---|---|
+| random, 10 s | −0.012 (0.003) | −0.011 (0.004) |
+| random, 60 s | −0.040 (0.011) | −0.026 (0.008) |
+| after up, 10 s | −0.073 (0.019) | −0.000 (0.001) |
+| after up, 60 s | −0.155 (0.028) | −0.000 (0.001) |
+| after down, 10 s | +0.009 (0.003) | +0.027 (0.007) |
+| after down, 60 s | +0.007 (0.007) | +0.073 (0.015) |
+
+After an up move the fast continuation dominates D, so the instant rule buys at once and misses the slow reversal; after a down move it waits and pays for it.
+
+## Correction (Oct 9)
+
+TGT is not a counterexample to monotonicity of the rule in the state: the one-step rule is monotone in each signed accumulator for TGT as for INTC (overview, Proposition 4). TGT shows that the decision after an event is not monotone in the deadline.
+
 ## Caveats
 
 - One month; one-unit orders; no impact; the consolidated ask during a lock may not be accessible.

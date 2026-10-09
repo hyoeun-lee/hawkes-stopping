@@ -2,7 +2,8 @@
 
 When to execute: optimal timing of an order under multi-timescale Hawkes intensities of mid-price moves, on WRDS Millisecond TAQ data.
 
-- [`docs/problem_statement.md`](docs/problem_statement.md): idea, model, questions and plan
+- [`docs/overview/overview.tex`](docs/overview/overview.tex): full project overview (background, data, model and derivations, stopping problems, research questions, results, to-do); compiles in Overleaf with `figures/`
+- [`docs/problem_statement.md`](docs/problem_statement.md): idea, model, questions and plan (short version)
 - [`docs/prototype_201705.md`](docs/prototype_201705.md): first results (INTC, TGT, May 2017)
 - [`stopping/drift.py`](stopping/drift.py): signed kernel g = a − c, signed accumulators, expected displacement in closed form
 - [`stopping/backtest.py`](stopping/backtest.py): timing rules (now, wait, model) and their cost on the quoted ask, with information delay and execution latency
