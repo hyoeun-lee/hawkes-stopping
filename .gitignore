@@ -1,0 +1,11 @@
+# TAQ-derived data stay out of the repository (WRDS terms): NBBO files, events, fitted models.
+data/
+nbbo/
+fits/
+*.pkl
+*.csv.gz
+results/*_per_day.csv
+logs/
+__pycache__/
+*.pyc
+.pytest_cache/

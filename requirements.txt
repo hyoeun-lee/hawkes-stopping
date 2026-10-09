@@ -1,0 +1,6 @@
+numpy
+pandas
+scipy
+pytest
+# hawkes-taq (event construction and fitting) is not packaged: clone it next to this repository
+# (../hawkes-taq) or set HAWKES_TAQ=/path/to/hawkes-taq. See stopping/__init__.py.
